@@ -1,0 +1,39 @@
+﻿<!DOCTYPE html>
+<link href="~/Content/PagedList.css" rel="stylesheet" />
+
+<html>
+<head>
+    <style>
+        #cartimage {
+            text-align:right;
+        
+        }
+    </style>
+
+    <title>@ViewBag.Title</title>
+</head>
+<body>
+    <table border="1" style="width: 1346px; font-family: Arial">
+        <tr style="background-color:#ffd800; color:black">
+            <td>
+                <h1 style="text-align:center">Electronics Store</h1>
+                <div id="cartimage"><b>Order History</b><a href="@Url.Action("Cart","Products")"><img src="~/126579-simple-black-square-icon-business-cart-7dots.png" width="50"/></a></div>
+                          
+            </td>
+        </tr>
+        <tr>
+            <td style="width: 800px; font-family: Arial">
+                @RenderBody()
+            </td>
+        </tr>
+        <tr>
+            <td style="text-align:center; font-size:smaller">
+                © Electronics Store
+            </td>
+        </tr>
+
+
+
+    </table>
+</body>
+</html>

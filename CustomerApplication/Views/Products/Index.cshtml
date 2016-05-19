@@ -1,0 +1,64 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@{int count=0;}
+
+@model IPagedList<CustomerApplication.Models.Products>
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>Index</title>
+</head>
+<body>
+    <p>
+        @*@Html.ActionLink("Create New", "Create")*@
+    </p>
+    <table border="0" style="text-align:center;width:1346px" >
+        @*<tr>
+            <th>
+                @Html.DisplayNameFor(model => model.First().ProductName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.First().ProductDescription)
+            </th>
+            <th></th>
+        </tr>*@
+        
+    
+    @foreach (var item in Model)
+    {
+        if (count % 4 ==0)
+        {
+          <tr> </tr>
+        } 
+            <td>
+                
+            
+                @{Dictionary<int, byte[]> ProductImages = ViewBag.Images;
+                  byte[] bytes = ProductImages[item.ProductId];
+                  string strBase64 = Convert.ToBase64String(bytes);
+                  string imageurl = "data:Image/png;base64," + strBase64; 
+                  }
+                
+                
+                
+                <a href="@Url.Action("Details", "Products", new { id = item.ProductId })"><img src="@imageurl" height="200" /></a><br />
+                @Html.DisplayFor(modelItem => item.ProductName)
+                <br />
+                @Html.DisplayFor(modelItem => item.ProductDescription)
+                @{count++; 
+    }
+            </td>
+               
+    }
+
+    </table>
+    @Html.PagedListPager(Model, page => Url.Action("Index", new { page }), new PagedListRenderOptions() { Display = PagedListDisplayMode.IfNeeded, DisplayPageCountAndCurrentLocation = true, DisplayItemSliceAndTotal = true, MaximumPageNumbersToDisplay=3,DisplayEllipsesWhenNotShowingAllPageNumbers=true }  )
+</body>
+</html>

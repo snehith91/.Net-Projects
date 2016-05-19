@@ -1,0 +1,36 @@
+﻿@model CustomerApplication.Models.ProductDetails
+
+@{
+    ViewBag.Title = "Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Name</h2>
+<script>
+    function displayMessage(){
+        alert("Item added to cart successfully");
+    
+    }
+</script>
+@using (Html.BeginForm("AddToCart", "Products", new { id = Model.ProductId }))
+{
+<table>
+    <tr>
+        <td>
+            @{byte[] img = Model.ProductImage;
+              string strBase64 = Convert.ToBase64String(img);
+              string imgUrl = "data:Image/png;base64," + strBase64;}
+
+            <img src="@imgUrl" width="600" />
+        </td>
+        <td>
+            <b>Technical Specs:</b>
+                @ViewBag.Description<br /><br />
+            <b>Price:</b> @Html.DisplayFor(x => x.ProductValue)
+            
+        </td>
+    </tr>
+</table>
+    <center><input type="submit" value="Add to Cart" onclick="displayMessage()" />  <input type="button" value="Cancel" onclick="location.href='@Url.Action("Index", "Products")'" /></center>
+    <br />
+}

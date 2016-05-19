@@ -1,0 +1,122 @@
+﻿@using CustomerApplication.Models;
+@model IEnumerable<CustomerApplication.Models.ProductDetails>
+
+@{
+    ViewBag.Title = "Cart";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<script src="~/Scripts/jquery-1.7.1.min.js"></script>
+<script src="~/Scripts/jquery.validate.min.js"></script>
+<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
+<script type="text/javascript">
+    function getProductPrice(controlId, price, controlId2) {
+        var qty = document.getElementById(controlId).value;
+        var productPrice = qty * price;
+        document.getElementById(controlId2).innerHTML = productPrice;
+        document.getElementById("txtGrandTotal").value = parseInt(document.getElementById("txtGrandTotal").value,10) + parseInt(productPrice,10);
+        
+    }
+
+    function validateFields(){
+
+
+
+    }
+
+</script>
+
+
+<h2>Cart</h2>
+@using(Html.BeginForm())
+{
+Dictionary<int, string> productNames = new Dictionary<int, string>();
+productNames = ViewBag.ProductNames;
+ List<OrderDetails> ListOfOderDetails = new List<OrderDetails>();   
+
+<table>
+
+    @foreach (ProductDetails productDetails in Model)
+    {
+        OrderDetails orderDetails  = new OrderDetails();
+        <tr>
+            <td>
+                @{byte[] img = productDetails.ProductImage;
+                  string strBase64 = Convert.ToBase64String(img);
+                  string imgUrl = "data:Image/png;base64," + strBase64;}
+                <img src="@imgUrl" width="500"/>
+            </td>
+            <td>
+                <table>
+                    <tr>
+                        <td>
+                            <b>Product Id</b>
+                        </td>
+                        <td>
+                            @{orderDetails.ProductId = productDetails.ProductId;} 
+                            @productDetails.ProductId
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Product Name</b>
+                        </td>
+                        <td>
+                            @{string productName = productNames[productDetails.ProductId];}
+                            @productName
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Price</b>
+                        </td>
+                        <td>
+                            @{int price = productDetails.ProductValue;}
+                            $@price
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Quantity</b>
+                        </td>
+                        <td>
+                            @{string idField = "txtProductqty" + productDetails.ProductId;}
+                            @{string priceIdField = "txtProductPrice" + productDetails.ProductId;}
+                            <input type="text" id="@idField" onchange="getProductPrice('@idField',@price,'@priceIdField')" >
+                            
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <b>Total</b>
+                        </td>
+                        <td>
+
+                            <p id="@priceIdField"></p>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    }
+    <tr>
+        <td></td>
+        <td>
+            <b>Grand Total</b>
+            <input type="text" id="txtGrandTotal" readonly="true" value="0"/>$
+        </td>
+    </tr>
+    <tr>
+        <td>
+
+        </td>
+        <td>
+            <br />
+            <input type="submit" value="Submit Order" onclick="validateFields()" />
+            <input type="button" value="Cancel"  onclick="location.href='@Url.Action("Index", "Products")'" />
+        </td>
+    </tr>
+
+</table>
+}
